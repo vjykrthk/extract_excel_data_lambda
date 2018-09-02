@@ -20,7 +20,7 @@ def get_excel_url(bucket, key):
 
 def get_excel_mics_list_by_cc_json(url):
     df = pd.read_excel(url, sheet_name='MICs List by CC')
-    to_json = df.to_json(path_or_buf='test.json', orient='records')
+    to_json = df.to_json(orient='records')
     return to_json
 
 
