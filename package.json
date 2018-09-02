@@ -1,0 +1,23 @@
+{
+  "name": "extract_excel_data",
+  "version": "1.0.0",
+  "description": "extracting_excel_data",
+  "main": "index.js",
+  "dependencies": {
+    "serverless-python-requirements": "^4.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vjykrthk/extract_excel_data_lambda.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vjykrthk/extract_excel_data_lambda/issues"
+  },
+  "homepage": "https://github.com/vjykrthk/extract_excel_data_lambda#readme"
+}
