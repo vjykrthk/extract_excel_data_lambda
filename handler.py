@@ -1,6 +1,8 @@
 import boto3
 import pandas as pd
 
+sheet_name = 'MICs List by CC'
+
 s3_client = boto3.client('s3')
 
 
@@ -14,12 +16,12 @@ def extract_excel_mics_list_by_cc_data(event, context):
 
 def get_excel_url(bucket, key):
     url = s3_client.generate_presigned_url(
-        'get_object', Params={'Bucket': bucket, 'Key': key}, ExpiresIn=86400)
+        'get_object', Params={'Bucket': bucket, 'Key': key})
     return url
 
 
 def get_excel_mics_list_by_cc_json(url):
-    df = pd.read_excel(url, sheet_name='MICs List by CC')
+    df = pd.read_excel(url, sheet_name=sheet_name)
     to_json = df.to_json(orient='records')
     return to_json
 
