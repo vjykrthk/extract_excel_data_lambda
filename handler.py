@@ -33,7 +33,10 @@ def get_file_name(key):
 def upload_json_file(data, bucket, key):
     binary_data = bytes(data, 'utf-8')
     file_name = get_file_name(key)
-    s3_client.put_object(Body=binary_data, Bucket=bucket, Key='{}.json'.format(file_name))
+    try:
+        s3_client.put_object(Body=binary_data, Bucket=bucket, Key='{}.json'.format(file_name))
+    except  Exception as e:
+        print(traceback.format_exc())
 
 
 if __name__ == '__main__':
