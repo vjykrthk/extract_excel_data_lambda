@@ -1,3 +1,5 @@
+import traceback
+
 import boto3
 import pandas as pd
 
@@ -11,7 +13,8 @@ def extract_excel_mics_list_by_cc_data(event, context):
     key = event['Records'][0]['s3']['object']['key']
     url = get_excel_url(bucket, key)
     json_data = get_excel_mics_list_by_cc_json(url)
-    upload_json_file(json_data, bucket, key)
+    if json_data:
+        upload_json_file(json_data, bucket, key)
 
 
 def get_excel_url(bucket, key):
@@ -21,9 +24,12 @@ def get_excel_url(bucket, key):
 
 
 def get_excel_mics_list_by_cc_json(url):
-    df = pd.read_excel(url, sheet_name=sheet_name)
-    to_json = df.to_json(orient='records')
-    return to_json
+    try:
+        df = pd.read_excel(url, sheet_name=sheet_name)
+        to_json = df.to_json(orient='records')
+        return to_json
+    except Exception as e:
+        print(traceback.format_exc())
 
 
 def get_file_name(key):
@@ -37,18 +43,13 @@ def upload_json_file(data, bucket, key):
 
 
 if __name__ == '__main__':
-    event = {'Records': [{'eventVersion': '2.0', 'eventSource': 'aws:s3', 'awsRegion': 'ap-south-1',
-                          'eventTime': '2018-09-02T19:48:18.310Z', 'eventName': 'ObjectCreated:Put',
-                          'userIdentity': {'principalId': 'A2RE0PJOQ3RLKS'},
-                          'requestParameters': {'sourceIPAddress': '223.226.67.234'},
-                          'responseElements': {'x-amz-request-id': '6F74310B3013CD1D',
-                                               'x-amz-id-2': 'DcWNAeyYbWVNvpLkbnpvv8uthDHkW7XlMCbDkIeFcYzviLcLcqIpOlf59LgpqYoNdpSHkpGegY8='},
-                          's3': {'s3SchemaVersion': '1.0', 'configurationId': '6860fbff-b4d2-4684-840b-0a51c60145b7',
-                                 'bucket': {'name': 'vjykrthk-extract-excel-data',
-                                            'ownerIdentity': {'principalId': 'A2RE0PJOQ3RLKS'},
-                                            'arn': 'arn:aws:s3:::vjykrthk-extract-excel-data'},
-                                 'object': {'key': 'ISO10383_MIC.xls', 'size': 1405952,
-                                            'eTag': 'f2099204c3626d6158cc677875c5fd35',
-                                            'sequencer': '005B8C3E823CD9E7D9'}}}]}
+    # good_excel_event = {
+    #     'Records': [{'s3': {'bucket': {'name': 'vjykrthk-extract-excel-data'}, 'object': {'key': 'ISO10383_MIC.xls'}}}]}
+    # context = {}
+    # extract_excel_mics_list_by_cc_data(good_excel_event, context)
+
+    bad_excel_event = {
+        'Records': [
+            {'s3': {'bucket': {'name': 'vjykrthk-extract-excel-data'}, 'object': {'key': 'BADISO10383_MIC.xls'}}}]}
     context = {}
-    extract_excel_mics_list_by_cc_data(event, context)
+    extract_excel_mics_list_by_cc_data(bad_excel_event, context)
