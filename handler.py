@@ -43,13 +43,7 @@ def upload_json_file(data, bucket, key):
 
 
 if __name__ == '__main__':
-    # good_excel_event = {
-    #     'Records': [{'s3': {'bucket': {'name': 'vjykrthk-extract-excel-data'}, 'object': {'key': 'ISO10383_MIC.xls'}}}]}
-    # context = {}
-    # extract_excel_mics_list_by_cc_data(good_excel_event, context)
-
-    bad_excel_event = {
-        'Records': [
-            {'s3': {'bucket': {'name': 'vjykrthk-extract-excel-data'}, 'object': {'key': 'BADISO10383_MIC.xls'}}}]}
+    good_excel_event = {
+        'Records': [{'s3': {'bucket': {'name': 'vjykrthk-extract-excel-data'}, 'object': {'key': 'ISO10383_MIC.xls'}}}]}
     context = {}
-    extract_excel_mics_list_by_cc_data(bad_excel_event, context)
+    extract_excel_mics_list_by_cc_data(good_excel_event, context)
