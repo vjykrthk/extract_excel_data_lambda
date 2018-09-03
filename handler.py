@@ -7,20 +7,14 @@ sheet_name = 'MICs List by CC'
 
 s3_client = boto3.client('s3')
 
+bucket_name = 'vjykrthk-extract-excel-data'
+excel_file = 'ISO10383_MIC.xls'
+
 
 def extract_excel_mics_list_by_cc_data(event, context):
-    bucket = event['Records'][0]['s3']['bucket']['name']
-    key = event['Records'][0]['s3']['object']['key']
-    url = get_excel_url(bucket, key)
-    json_data = get_excel_mics_list_by_cc_json(url)
+    json_data = get_excel_mics_list_by_cc_json(excel_file)
     if json_data:
-        upload_json_file(json_data, bucket, key)
-
-
-def get_excel_url(bucket, key):
-    url = s3_client.generate_presigned_url(
-        'get_object', Params={'Bucket': bucket, 'Key': key})
-    return url
+        upload_json_file(json_data, bucket_name, excel_file)
 
 
 def get_excel_mics_list_by_cc_json(url):
@@ -43,7 +37,4 @@ def upload_json_file(data, bucket, key):
 
 
 if __name__ == '__main__':
-    good_excel_event = {
-        'Records': [{'s3': {'bucket': {'name': 'vjykrthk-extract-excel-data'}, 'object': {'key': 'ISO10383_MIC.xls'}}}]}
-    context = {}
-    extract_excel_mics_list_by_cc_data(good_excel_event, context)
+    extract_excel_mics_list_by_cc_data({}, {})

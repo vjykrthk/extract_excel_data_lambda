@@ -21,12 +21,6 @@ custom:
 functions:
   extract_excel_data:
     handler: handler.extract_excel_mics_list_by_cc_data
-    events:
-      - s3:
-          bucket: ${self:custom.bucket}
-          event: s3:ObjectCreated:*
-          rules:
-            - suffix: .xls
 
 plugins:
   - serverless-python-requirements
